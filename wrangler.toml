@@ -1,6 +1,6 @@
 # Configure Cloudflare Worker
 
-name = "hosting-cloudflare-worker"
+name = "hazeol-engineering-blog-cloudflare-worker"
 compatibility_date = "2025-07-31"
 
 [build]
