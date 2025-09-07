@@ -6,6 +6,8 @@ title = 'PostgreSQL and the 63-character limit'
 
 I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;
 
+<!--more-->
+
 ```js
 const { Sequelize, DataTypes } = require('sequelize');
 

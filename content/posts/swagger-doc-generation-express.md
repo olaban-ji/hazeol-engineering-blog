@@ -7,7 +7,9 @@ featured_image = "/images/swagger-doc-screenshot.webp"
 
 _Update (May 13, 2025): If you’re starting a new project, I’d highly recommend using the NestJs framework, which has a dedicated module for swagger document generation that is much easier to implement and maintain._
 
-As a developer, one of the tasks that ranks up there with how mundane and stressful it can be is creating or updating a Swagger spec documentation with all the necessary parameters and responses. A couple of the packages I encountered like swagger-autogen help with the automatic construction of Swagger spec documentation but they only populate the endpoint paths. When it comes to populating the parameters and responses of each endpoint path, one has to manually annotate each route with the proper parameter and response schema definitions which is the mundane part because you have to repeat that process for all your routes.
+As a developer, one of the tasks that ranks up there with how mundane and stressful it can be is creating or updating a Swagger spec documentation with all the necessary parameters and responses.
+<!--more-->
+ A couple of the packages I encountered like swagger-autogen help with the automatic construction of Swagger spec documentation but they only populate the endpoint paths. When it comes to populating the parameters and responses of each endpoint path, one has to manually annotate each route with the proper parameter and response schema definitions which is the mundane part because you have to repeat that process for all your routes.
 
 {{< figure src="/images/swagger-manual-annotation.webp" caption="Annotating all routes in a large codebase sounds painful" alt="Manual Swagger Annotation" width="75%" margin="0 auto 0 3rem" >}}
 

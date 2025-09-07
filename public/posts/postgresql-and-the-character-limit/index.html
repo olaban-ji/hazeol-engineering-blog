@@ -6,73 +6,7 @@
     
     <title>PostgreSQL and the 63-character limit | hazeol engineering blog</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;
-const { Sequelize, DataTypes } = require(&#39;sequelize&#39;);
-
-const sequelize = new Sequelize(&#39;database_name&#39;, &#39;username&#39;, &#39;password&#39;, {
-  host: &#39;localhost&#39;,
-  dialect: &#39;postgres&#39;,
-});
-
-const UserAccount = sequelize.define(
-  &#39;user_account&#39;,
-  {
-    columnA: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    columnB: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    columnC: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    columnD: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    columnE: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    columnF: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-  },
-  {
-    /**
-     * @note Composite Index
-     */
-    indexes: [
-      {
-        unique: true,
-        fields: [
-          &#39;columnA&#39;,
-          &#39;columnB&#39;,
-          &#39;columnC&#39;,
-          &#39;columnD&#39;,
-          &#39;columnE&#39;,
-          &#39;columnF&#39;,
-        ],
-      },
-    ],
-  }
-);
-
-sequelize
-  .sync()
-  .then(() =&gt; {
-    console.log(
-      &#39;UserAccount model has been synced with the PostgreSQL database.&#39;
-    );
-  })
-  .catch((err) =&gt; {
-    console.error(&#39;Unable to sync the database:&#39;, err);
-  });
-Looks like this works fine right?! Well, partially.">
+    <meta name="description" content="I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;">
     <meta name="generator" content="Hugo 0.148.2">
     
     
@@ -106,8 +40,7 @@ Looks like this works fine right?! Well, partially.">
     <meta property="og:url" content="https://engineering.hazeol.com/posts/postgresql-and-the-character-limit/">
   <meta property="og:site_name" content="hazeol engineering blog">
   <meta property="og:title" content="PostgreSQL and the 63-character limit">
-  <meta property="og:description" content="I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;
-const { Sequelize, DataTypes } = require(&#39;sequelize&#39;); const sequelize = new Sequelize(&#39;database_name&#39;, &#39;username&#39;, &#39;password&#39;, { host: &#39;localhost&#39;, dialect: &#39;postgres&#39;, }); const UserAccount = sequelize.define( &#39;user_account&#39;, { columnA: { type: DataTypes.STRING, allowNull: true, }, columnB: { type: DataTypes.STRING, allowNull: true, }, columnC: { type: DataTypes.STRING, allowNull: true, }, columnD: { type: DataTypes.STRING, allowNull: true, }, columnE: { type: DataTypes.STRING, allowNull: true, }, columnF: { type: DataTypes.STRING, allowNull: true, }, }, { /** * @note Composite Index */ indexes: [ { unique: true, fields: [ &#39;columnA&#39;, &#39;columnB&#39;, &#39;columnC&#39;, &#39;columnD&#39;, &#39;columnE&#39;, &#39;columnF&#39;, ], }, ], } ); sequelize .sync() .then(() =&gt; { console.log( &#39;UserAccount model has been synced with the PostgreSQL database.&#39; ); }) .catch((err) =&gt; { console.error(&#39;Unable to sync the database:&#39;, err); }); Looks like this works fine right?! Well, partially.">
+  <meta property="og:description" content="I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -115,15 +48,13 @@ const { Sequelize, DataTypes } = require(&#39;sequelize&#39;); const sequelize =
     <meta property="article:modified_time" content="2024-09-14T00:00:00+00:00">
 
   <meta itemprop="name" content="PostgreSQL and the 63-character limit">
-  <meta itemprop="description" content="I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;
-const { Sequelize, DataTypes } = require(&#39;sequelize&#39;); const sequelize = new Sequelize(&#39;database_name&#39;, &#39;username&#39;, &#39;password&#39;, { host: &#39;localhost&#39;, dialect: &#39;postgres&#39;, }); const UserAccount = sequelize.define( &#39;user_account&#39;, { columnA: { type: DataTypes.STRING, allowNull: true, }, columnB: { type: DataTypes.STRING, allowNull: true, }, columnC: { type: DataTypes.STRING, allowNull: true, }, columnD: { type: DataTypes.STRING, allowNull: true, }, columnE: { type: DataTypes.STRING, allowNull: true, }, columnF: { type: DataTypes.STRING, allowNull: true, }, }, { /** * @note Composite Index */ indexes: [ { unique: true, fields: [ &#39;columnA&#39;, &#39;columnB&#39;, &#39;columnC&#39;, &#39;columnD&#39;, &#39;columnE&#39;, &#39;columnF&#39;, ], }, ], } ); sequelize .sync() .then(() =&gt; { console.log( &#39;UserAccount model has been synced with the PostgreSQL database.&#39; ); }) .catch((err) =&gt; { console.error(&#39;Unable to sync the database:&#39;, err); }); Looks like this works fine right?! Well, partially.">
+  <meta itemprop="description" content="I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;">
   <meta itemprop="datePublished" content="2024-09-14T00:00:00+00:00">
   <meta itemprop="dateModified" content="2024-09-14T00:00:00+00:00">
   <meta itemprop="wordCount" content="538">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="PostgreSQL and the 63-character limit">
-  <meta name="twitter:description" content="I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;
-const { Sequelize, DataTypes } = require(&#39;sequelize&#39;); const sequelize = new Sequelize(&#39;database_name&#39;, &#39;username&#39;, &#39;password&#39;, { host: &#39;localhost&#39;, dialect: &#39;postgres&#39;, }); const UserAccount = sequelize.define( &#39;user_account&#39;, { columnA: { type: DataTypes.STRING, allowNull: true, }, columnB: { type: DataTypes.STRING, allowNull: true, }, columnC: { type: DataTypes.STRING, allowNull: true, }, columnD: { type: DataTypes.STRING, allowNull: true, }, columnE: { type: DataTypes.STRING, allowNull: true, }, columnF: { type: DataTypes.STRING, allowNull: true, }, }, { /** * @note Composite Index */ indexes: [ { unique: true, fields: [ &#39;columnA&#39;, &#39;columnB&#39;, &#39;columnC&#39;, &#39;columnD&#39;, &#39;columnE&#39;, &#39;columnF&#39;, ], }, ], } ); sequelize .sync() .then(() =&gt; { console.log( &#39;UserAccount model has been synced with the PostgreSQL database.&#39; ); }) .catch((err) =&gt; { console.error(&#39;Unable to sync the database:&#39;, err); }); Looks like this works fine right?! Well, partially.">
+  <meta name="twitter:description" content="I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;">
 
       
     
@@ -322,8 +253,7 @@ To mitigate this, add a custom index name property that complies with the charac
 </span></span><span style="display:flex;"><span>  .<span style="color:#66d9ef">catch</span>((<span style="color:#a6e22e">err</span>) =&gt; {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#39;Unable to sync the database:&#39;</span>, <span style="color:#a6e22e">err</span>);
 </span></span><span style="display:flex;"><span>  });
-</span></span></code></pre></div><p>user_accounts_columnA_columnB_columnC_columnD_columnE_columnF has a character count of 61 which is just under 63 characters so we wouldn’t have a problem with database conflict on subsequent application restarts.</p>
-<ul class="pa0">
+</span></span></code></pre></div><p>user_accounts_columnA_columnB_columnC_columnD_columnE_columnF has a character count of 61 which is just under 63 characters so we wouldn’t have a problem with database conflict on subsequent application restarts.</p><ul class="pa0">
   
 </ul>
 <div class="mt6 instapaper_ignoref">
