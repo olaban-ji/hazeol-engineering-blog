@@ -1,0 +1,14 @@
+baseURL = 'https://engineering.hazeol.com/'
+languageCode = 'en-us'
+title = 'hazeol engineering blog'
+
+[module]
+[[module.imports]]
+disable = false
+ignoreConfig = false
+ignoreImports = false
+path = 'github.com/theNewDynamic/gohugo-theme-ananke/v2'
+
+[params]
+description = "hazeol's engineering blog"
+custom_css = ["custom.css"]

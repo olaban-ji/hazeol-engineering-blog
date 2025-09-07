@@ -1,0 +1,45 @@
+/* Custom CSS for Ananke footnotes */
+
+/* Add a line separator above the footnotes section */
+.footnotes {
+  /* border-top: 1px solid #eee; */
+  /* margin-top: 2rem; */
+  padding-top: 1rem;
+  font-size: 0.8em;
+  color: #666;
+}
+
+/* Style the footnote list items */
+.footnotes ol {
+  margin-top: 1em;
+  padding-left: 1.2em; /* Keep some padding for better readability */
+}
+
+.footnotes ol li {
+  line-height: 1.4;
+  margin-bottom: 0.5em;
+  padding-left: 0.3em; /* Minimal padding for spacing */
+}
+
+/* Style the superscript links in the body text */
+sup a[href^="#fn:"] {
+  color: #0076df;
+  text-decoration: none;
+  font-size: 0.95em;
+}
+
+/* Add a hover state for the superscript links */
+sup a[href^="#fn:"]:hover {
+  text-decoration: underline;
+}
+
+/* Style the footnote numbers in the list */
+.footnotes ol li::marker {
+  color: #999;
+  font-weight: normal;
+}
+
+/* Hide the back-to-reference link (↩ symbol) */
+.footnotes ol li a[href^="#fnref:"] {
+  display: none;
+}

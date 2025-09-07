@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Prisma, PgBouncer &amp; Prepared Statements | hazeol engineering blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="I recently had to use Prisma to interface with a PostgreSQL database that I wasn’t directly involved with at work, and I encountered an interesting problem.
+We have several deployment environments, each with a hierarchy, and I never encountered the issue in the two lowest environments. However, from the third-tier environment upward, any of the three errors in the code block below randomly appear in the logs when the job that runs the database queries using the Prisma client is executed.">
+    <meta name="generator" content="Hugo 0.148.2">
+    
+    
+    
+      <meta name="robots" content="index, follow">
+    
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.f2eacbe7a4fc82aa0eff14b7ad2c921609e5f69adfb6ba96a5a77cf5406923a0.css" >
+
+
+
+  
+
+
+    
+
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="https://engineering.hazeol.com/posts/prisma-pgbouncer-prepared-statements/">
+    
+
+    <meta property="og:url" content="https://engineering.hazeol.com/posts/prisma-pgbouncer-prepared-statements/">
+  <meta property="og:site_name" content="hazeol engineering blog">
+  <meta property="og:title" content="Prisma, PgBouncer & Prepared Statements">
+  <meta property="og:description" content="I recently had to use Prisma to interface with a PostgreSQL database that I wasn’t directly involved with at work, and I encountered an interesting problem.
+We have several deployment environments, each with a hierarchy, and I never encountered the issue in the two lowest environments. However, from the third-tier environment upward, any of the three errors in the code block below randomly appear in the logs when the job that runs the database queries using the Prisma client is executed.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-08-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-08-10T00:00:00+00:00">
+
+  <meta itemprop="name" content="Prisma, PgBouncer & Prepared Statements">
+  <meta itemprop="description" content="I recently had to use Prisma to interface with a PostgreSQL database that I wasn’t directly involved with at work, and I encountered an interesting problem.
+We have several deployment environments, each with a hierarchy, and I never encountered the issue in the two lowest environments. However, from the third-tier environment upward, any of the three errors in the code block below randomly appear in the logs when the job that runs the database queries using the Prisma client is executed.">
+  <meta itemprop="datePublished" content="2024-08-10T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2024-08-10T00:00:00+00:00">
+  <meta itemprop="wordCount" content="277">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Prisma, PgBouncer & Prepared Statements">
+  <meta name="twitter:description" content="I recently had to use Prisma to interface with a PostgreSQL database that I wasn’t directly involved with at work, and I encountered an interesting problem.
+We have several deployment environments, each with a hierarchy, and I never encountered the issue in the two lowest environments. However, from the third-tier environment upward, any of the three errors in the code block below randomly appear in the logs when the job that runs the database queries using the Prisma client is executed.">
+
+      
+    
+	
+  </head><body class="ma0 avenir bg-near-white production">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        hazeol engineering blog
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  
+  <article class="flex-l mw8 center ph3 flex-wrap justify-between">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Posts
+      </aside><div id="sharing" class="mt3 ananke-socials"></div>
+<h1 class="f1 athelas mt3 mb1">Prisma, PgBouncer &amp; Prepared Statements</h1>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2024-08-10T00:00:00Z">August 10, 2024</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p>I recently had to use Prisma to interface with a PostgreSQL database that I wasn’t directly involved with at work, and I encountered an interesting problem.</p>
+<p>We have several deployment environments, each with a hierarchy, and I never encountered the issue in the two lowest environments. However, from the third-tier environment upward, any of the three errors in the code block below randomly appear in the logs when the job that runs the database queries using the Prisma client is executed.</p>
+<pre tabindex="0"><code>ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: &#34;26000&#34;, message: &#34;prepared statement \&#34;s#\&#34; does not exist&#34;, severity: &#34;ERROR&#34;, detail: None, column: None, hint: None }), transient: false })
+
+###############################################################################################################################################################################################################################################
+
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: &#34;42P05&#34;, message: &#34;prepared statement \&#34;s#\&#34; already exists&#34;, severity: &#34;ERROR&#34;, detail: None, column: None, hint: None }), transient: false })
+
+###############################################################################################################################################################################################################################################
+
+ConnectorError(ConnectorError { user_facing_error: None, kind: QueryError(PostgresError { code: &#34;08P01&#34;, message: &#34;bind message supplies # parameters, but prepared statement \&#34;s#\&#34; requires #&#34;, severity: &#34;ERROR&#34;, detail: None, column: None, hint: None }), transient: false })
+</code></pre><p>The “#” in “s#” represents a number. I’ve seen it go as high as 16 suggesting that it increases as the error occurs.</p>
+<p>Turns out, PgBouncer which is a pretty popular connection pooler for PostgreSQL didn’t have support for prepared statements (which Prisma uses to execute its queries) until recently.</p>
+<p>The fix is simple: you just need to add pgbouncer flag to your connection URL string as specified in the documentation:</p>
+<pre tabindex="0"><code>postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+</code></pre><p>becomes</p>
+<pre tabindex="0"><code>postgresql://USER:PASSWORD@HOST:PORT/DATABASE?pgbouncer=true
+</code></pre><p>PS: I saw a <a href="https://github.com/prisma/prisma/issues/11643#issuecomment-1268341203" target="_blank" rel="noopener">Prisma GitHub issue</a> comment where the Supabase (if you use it in your stack) project needs to be restarted if you have initially connected without the pgbouncer flag.</p>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="https://engineering.hazeol.com/" >
+    &copy;  hazeol engineering blog 2025 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

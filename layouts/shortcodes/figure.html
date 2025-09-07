@@ -1,0 +1,9 @@
+<figure class="nested-copy-line-height lh-copy{{ with .Get "class" }} {{ . }}{{ end }}" style="{{ with .Get "width" }}width: {{ . }};{{ else }}width: 50%;{{ end }}{{ with .Get "margin" }} margin: {{ . }};{{ else }} margin: 0 1rem 0 0;{{ end }}">
+  <img src="{{ .Get "src" }}" alt="{{ with .Get "alt" }}{{ . }}{{ else }}{{ .Get
+  "caption" }}{{ end }}" class="w-100" />
+  {{ if .Get "caption" }}
+  <figcaption class="f6 i tc pa0">
+    {{ .Get "caption" | markdownify }}
+  </figcaption>
+  {{ end }}
+</figure>

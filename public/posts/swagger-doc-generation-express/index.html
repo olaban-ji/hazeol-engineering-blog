@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Automatic Generation of Swagger Specification In ExpressJS Applications | hazeol engineering blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="Update (May 13, 2025): If you’re starting a new project, I’d highly recommend using the NestJs framework, which has a dedicated module for swagger document generation that is much easier to implement and maintain.
+As a developer, one of the tasks that ranks up there with how mundane and stressful it can be is creating or updating a Swagger spec documentation with all the necessary parameters and responses. A couple of the packages I encountered like swagger-autogen help with the automatic construction of Swagger spec documentation but they only populate the endpoint paths. When it comes to populating the parameters and responses of each endpoint path, one has to manually annotate each route with the proper parameter and response schema definitions which is the mundane part because you have to repeat that process for all your routes.">
+    <meta name="generator" content="Hugo 0.148.2">
+    
+    
+    
+      <meta name="robots" content="index, follow">
+    
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.f2eacbe7a4fc82aa0eff14b7ad2c921609e5f69adfb6ba96a5a77cf5406923a0.css" >
+
+
+
+  
+
+
+    
+
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="https://engineering.hazeol.com/posts/swagger-doc-generation-express/">
+    
+
+    <meta property="og:url" content="https://engineering.hazeol.com/posts/swagger-doc-generation-express/">
+  <meta property="og:site_name" content="hazeol engineering blog">
+  <meta property="og:title" content="Automatic Generation of Swagger Specification In ExpressJS Applications">
+  <meta property="og:description" content="Update (May 13, 2025): If you’re starting a new project, I’d highly recommend using the NestJs framework, which has a dedicated module for swagger document generation that is much easier to implement and maintain.
+As a developer, one of the tasks that ranks up there with how mundane and stressful it can be is creating or updating a Swagger spec documentation with all the necessary parameters and responses. A couple of the packages I encountered like swagger-autogen help with the automatic construction of Swagger spec documentation but they only populate the endpoint paths. When it comes to populating the parameters and responses of each endpoint path, one has to manually annotate each route with the proper parameter and response schema definitions which is the mundane part because you have to repeat that process for all your routes.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-08-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-08-11T00:00:00+00:00">
+
+  <meta itemprop="name" content="Automatic Generation of Swagger Specification In ExpressJS Applications">
+  <meta itemprop="description" content="Update (May 13, 2025): If you’re starting a new project, I’d highly recommend using the NestJs framework, which has a dedicated module for swagger document generation that is much easier to implement and maintain.
+As a developer, one of the tasks that ranks up there with how mundane and stressful it can be is creating or updating a Swagger spec documentation with all the necessary parameters and responses. A couple of the packages I encountered like swagger-autogen help with the automatic construction of Swagger spec documentation but they only populate the endpoint paths. When it comes to populating the parameters and responses of each endpoint path, one has to manually annotate each route with the proper parameter and response schema definitions which is the mundane part because you have to repeat that process for all your routes.">
+  <meta itemprop="datePublished" content="2024-08-11T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2024-08-11T00:00:00+00:00">
+  <meta itemprop="wordCount" content="1103">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Automatic Generation of Swagger Specification In ExpressJS Applications">
+  <meta name="twitter:description" content="Update (May 13, 2025): If you’re starting a new project, I’d highly recommend using the NestJs framework, which has a dedicated module for swagger document generation that is much easier to implement and maintain.
+As a developer, one of the tasks that ranks up there with how mundane and stressful it can be is creating or updating a Swagger spec documentation with all the necessary parameters and responses. A couple of the packages I encountered like swagger-autogen help with the automatic construction of Swagger spec documentation but they only populate the endpoint paths. When it comes to populating the parameters and responses of each endpoint path, one has to manually annotate each route with the proper parameter and response schema definitions which is the mundane part because you have to repeat that process for all your routes.">
+
+      
+    
+	
+  </head><body class="ma0 avenir bg-near-white production">
+
+    
+   
+  
+
+  
+  
+  
+  <header class="cover bg-center" style="background-image: url('https://engineering.hazeol.com/images/swagger-doc-screenshot.webp');">
+    <div class="bg-black-60">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        hazeol engineering blog
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+      <div class="tc-l pv6 ph3 ph4-ns">
+        
+          <div class="f2 f1-l fw2 white-90 mb0 lh-title">Automatic Generation of Swagger Specification In ExpressJS Applications</div>
+          
+        
+      </div>
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  
+  <article class="flex-l mw8 center ph3 flex-wrap justify-between">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Posts
+      </aside><div id="sharing" class="mt3 ananke-socials"></div>
+<h1 class="f1 athelas mt3 mb1">Automatic Generation of Swagger Specification In ExpressJS Applications</h1>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2024-08-11T00:00:00Z">August 11, 2024</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p><em>Update (May 13, 2025): If you’re starting a new project, I’d highly recommend using the NestJs framework, which has a dedicated module for swagger document generation that is much easier to implement and maintain.</em></p>
+<p>As a developer, one of the tasks that ranks up there with how mundane and stressful it can be is creating or updating a Swagger spec documentation with all the necessary parameters and responses. A couple of the packages I encountered like swagger-autogen help with the automatic construction of Swagger spec documentation but they only populate the endpoint paths. When it comes to populating the parameters and responses of each endpoint path, one has to manually annotate each route with the proper parameter and response schema definitions which is the mundane part because you have to repeat that process for all your routes.</p>
+<figure class="nested-copy-line-height lh-copy" style="width: 75%; margin: 0 auto 0 3rem;">
+  <img src="/images/swagger-manual-annotation.webp" alt="Manual Swagger Annotation" class="w-100" />
+  
+  <figcaption class="f6 i tc pa0">
+    Annotating all routes in a large codebase sounds painful
+  </figcaption>
+  
+</figure>
+<p>Enter [express-oas-generator]https://www.npmjs.com/package/express-oas-generator)!</p>
+<p>I have to admit, I faced a bit of a challenge trying to get the package to work as I expected before finally getting it right, hence this article.</p>
+<p>For the sake of this article, I’d like to believe you have a working understanding of the basics of setting up Express.js and can also install the package as specified in the documentation. Now, let’s dive into what worked for me.</p>
+<p>You need to create a swagger config file. Let’s say swagger_config.js;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> { <span style="color:#a6e22e">SPEC_OUTPUT_FILE_BEHAVIOR</span> } <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;express-oas-generator&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">_</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;lodash&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">swaggerConfig</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">predefinedSpec</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">spec</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_</span>.<span style="color:#a6e22e">set</span>(<span style="color:#a6e22e">spec</span>, <span style="color:#e6db74">&#39;securityDefinitions.bearerAuth&#39;</span>, {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;apiKey&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Authorization&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">in</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;header&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">description</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Please enter your token with &#39;Bearer &#39; prefix (e.g., &#39;Bearer your-token-here&#39;).&#34;</span>,
+</span></span><span style="display:flex;"><span>    });
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_</span>.<span style="color:#a6e22e">set</span>(<span style="color:#a6e22e">spec</span>, <span style="color:#e6db74">&#39;security&#39;</span>, [{ <span style="color:#a6e22e">bearerAuth</span><span style="color:#f92672">:</span> [] }]);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_</span>.<span style="color:#a6e22e">set</span>(<span style="color:#a6e22e">spec</span>, <span style="color:#e6db74">&#39;schemes&#39;</span>, [<span style="color:#e6db74">&#39;https&#39;</span>, <span style="color:#e6db74">&#39;http&#39;</span>]);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">spec</span>;
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">swaggerUiServePath</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;v1/api-docs&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">specOutputPath</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;src/docs/swagger_output.json&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ignoredNodeEnvironments</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;production&#39;</span>, <span style="color:#e6db74">&#39;qa&#39;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">alwaysServeDocs</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">tags</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;items&#39;</span>, <span style="color:#e6db74">&#39;orders&#39;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">specOutputFileBehavior</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">SPEC_OUTPUT_FILE_BEHAVIOR</span>.<span style="color:#a6e22e">PRESERVE</span>,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">swaggerConfig</span>;
+</span></span></code></pre></div><p>predefinedSpec: a function that takes in additional specification parameters you can add to your generated swagger file.</p>
+<p>swaggerUiServePath: Swagger UI path for your REST API (default value is api-docs)</p>
+<p>ignoredNodeEnvironments: An array of strings representing environments you want to ignore swagger generation in. It checks process.env.NODE_ENV for the environment the app is currently deployed on. If you set NODE_ENV as dev, a Swagger spec documentation would be generated. If you set it as qa, it doesn’t. It has a default value of [‘production’]</p>
+<p>alwaysServeDocs: false represents not showing the swagger page if the app is running in the ignored node environment. true doesn’t respect that constraint. It will show the swagger page regardless of whether the app is running in the ignored environment or not.</p>
+<p>tags: It helps with grouping your endpoints. all the matching route paths are grouped based on what’s in the array. If it doesn’t match, it is grouped under default on the swagger page.</p>
+<p>specOutputFileBehavior: Takes in either one of two enum values; ‘PRESERVE’ and ‘RECREATE’. PRESERVE just appends to the existing Swagger spec document and never updates existing schema definitions that have already been defined. RECREATE starts the Swagger spec documentation from scratch again each time the application restarts.</p>
+<p>Now, that’s all for the more straightforward part.</p>
+<p>To make use of the middleware as specified in the documentation, you need to invoke the responses handler immediately after instantiating app so it is the very first middleware, and then setting the requests handler as the very last middleware;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">express</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;express&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">swaggerConfig</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;path/to/swagger_config&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">expressOasGenerator</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;express-oas-generator&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">someOtherMiddleware</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;path/to/some-other-middleware&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">anotherMiddleWare</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;path/to/another-middleware&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">itemsRouter</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;path/to/items/router/file&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">ordersRouter</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;path/to/orders/router/file&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">express</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @info invoke handleResponses as the first middleware
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">expressOasGenerator</span>.<span style="color:#a6e22e">handleResponses</span>(<span style="color:#a6e22e">app</span>, <span style="color:#a6e22e">swaggerConfig</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @info Invoke all other middlewares and routes here
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">someOtherMiddleware</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">anotherMiddleWare</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#39;/items&#39;</span>, <span style="color:#a6e22e">itemsRouter</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#39;/orders&#39;</span>, <span style="color:#a6e22e">ordersRouter</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @info Invoke handleRequests as the last middleware
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">expressOasGenerator</span>.<span style="color:#a6e22e">handleRequests</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">app</span>;
+</span></span></code></pre></div><p>There are a few things to note to make this work properly;</p>
+<ul>
+<li>As mentioned in the <a href="https://www.npmjs.com/package/express-oas-generator#troubleshooting" target="_blank" rel="noopener">documentation</a>, all the middleware and route paths must invoke the next middleware function for the requests handlerto work as expected:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;/v1/order/:id/find&#39;</span>, (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">data</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">message</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Order fetched successfully!&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">success</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">200</span>).<span style="color:#a6e22e">json</span>(<span style="color:#a6e22e">data</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>becomes;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;/v1/order/:id/find&#39;</span>, (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">next</span>) =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">data</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">message</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Order fetched successfully!&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">success</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">200</span>).<span style="color:#a6e22e">json</span>(<span style="color:#a6e22e">data</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">next</span>()
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><ul>
+<li>If you have an authentication middleware or a middleware that restricts access to your routes by default, you’ll need to exclude the routes that will be serving the Swagger spec documentation. Let’s say someOtherMiddleware is a middleware for authentication, you can specify the routes in an array variable, and check if the request path matches any pattern with the micromatch package. Invoke next() if there’s a hit. If not, go ahead with the authorization check.
+const micromatch = require(&lsquo;micromatch&rsquo;);</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">excludedRoutes</span> <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#39;/v1/api-docs&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#39;/v1/api-docs/&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#39;/v1/api-docs/*&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#39;/v1/api-docs/*/*&#39;</span>,
+</span></span><span style="display:flex;"><span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">authenticateRequest</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">next</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">micromatch</span>.<span style="color:#a6e22e">isMatch</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">path</span>, <span style="color:#a6e22e">excludedRoutes</span>)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     * @info Authentication Logic here
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">     */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">error</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;Error in authenticateRequest =&gt;&#39;</span>, <span style="color:#a6e22e">error</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">401</span>).<span style="color:#a6e22e">json</span>({ <span style="color:#a6e22e">message</span><span style="color:#f92672">:</span> <span style="color:#e6db74">`Invalid Token: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">error</span>.<span style="color:#a6e22e">message</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span> });
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">authenticateRequest</span>;
+</span></span></code></pre></div><ul>
+<li>As it is common practice, there’s usually a middleware that acts as a final catch-all for requests that don’t match any route or have not been handled by other middleware. Such middleware should be placed after the requests handler middleware.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">expressOasGenerator</span>.<span style="color:#a6e22e">handleRequests</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">app</span>;
+</span></span></code></pre></div><p>becomes;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">expressOasGenerator</span>.<span style="color:#a6e22e">handleRequests</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>((<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">next</span>) =&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">headersSent</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">errorResMsg</span>(<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">HttpStatus</span>.<span style="color:#a6e22e">NOT_FOUND</span>, <span style="color:#a6e22e">ENDPOINT_NOT_FOUND</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">app</span>;
+</span></span></code></pre></div><p>Ordering it this way ensures that the Swagger documentation page shows up and does not return an endpoint not found error when you attempt to access the Swagger page. Also, theres.headersSent property is checked to know if the HTTP response headers have already been sent to the client. If we don’t perform the check, the app will throw the error below indicating that the response headers have been set whenever a request to your app has been fulfilled;</p>
+<pre tabindex="0"><code>Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (node:_http_outgoing:703:11)
+...
+</code></pre><p>To save yourself the headache from the last highlighted issue, since ideally, the swagger generation should be on your local machine during development and not when deployed implying that the swagger output file would be static once deployed, leverage the <a href="https://www.npmjs.com/package/swagger-ui-express" target="_blank" rel="noopener">swagger-ui-express</a> package to serve the Swagger spec documentation and comment out all the express-oas-generator middleware handlers and just set up a route to serve the swagger spec documentation;</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">express</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;express&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">express</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">swaggerUi</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;swagger-ui-express&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">swaggerDocument</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;./swagger_output.json&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#39;/v1/api-docs&#39;</span>, <span style="color:#a6e22e">swaggerUi</span>.<span style="color:#a6e22e">serve</span>, <span style="color:#a6e22e">swaggerUi</span>.<span style="color:#a6e22e">setup</span>(<span style="color:#a6e22e">swaggerDocument</span>));
+</span></span></code></pre></div><p>That about sums up all I had to do to set up automatically generating Swagger specifications documentation. Thank you!</p>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="https://engineering.hazeol.com/" >
+    &copy;  hazeol engineering blog 2025 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

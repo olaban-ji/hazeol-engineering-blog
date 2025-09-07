@@ -1,0 +1,61 @@
+{{ $type := .Get "type" | default "info" }}
+{{ $icon := .Get "icon" }}
+
+{{ $defaults := dict 
+  "info" (dict 
+    "bg" "#e3f2fd" 
+    "border" "#2196f3" 
+    "text" "#2196f3" 
+    "fallback" "ℹ️"
+  )
+  "warning" (dict 
+    "bg" "#fff3e0" 
+    "border" "#ff9800" 
+    "text" "#ff9800" 
+    "fallback" "⚠️"
+  )
+  "danger" (dict 
+    "bg" "#ffebee" 
+    "border" "#f44336" 
+    "text" "#f44336" 
+    "fallback" "❌"
+  )
+  "success" (dict 
+    "bg" "#e8f5e8" 
+    "border" "#4caf50" 
+    "text" "#4caf50" 
+    "fallback" "✅"
+  )
+  "note" (dict 
+    "bg" "#f3e5f5" 
+    "border" "#9c27b0" 
+    "text" "#9c27b0" 
+    "fallback" "📝"
+  )
+  "tip" (dict 
+    "bg" "#fff8e1" 
+    "border" "#ffc107" 
+    "text" "#ffc107" 
+    "fallback" "💡"
+  )
+}}
+
+{{ $config := index $defaults $type }}
+{{ $displayIcon := "" }}
+
+{{ if $icon }}
+  {{ $displayIcon = $icon | safeHTML }}
+{{ else }}
+  {{ $displayIcon = $config.fallback }}
+{{ end }}
+
+<div class="alert-block" style="background-color: {{ $config.bg }}; border-left: 4px solid {{ $config.border }}; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+  <div style="display: flex; align-items: flex-start;">
+    <div style="margin-right: 0.5rem; line-height: 1;">
+      <span style="color: {{ $config.text }};">{{ $displayIcon }}</span>
+    </div>
+  </div>
+  <div class="nested-copy-line-height" style="margin-left: 24px; margin-top: 0.25rem;">
+    {{ .Inner | markdownify }}
+  </div>
+</div>
