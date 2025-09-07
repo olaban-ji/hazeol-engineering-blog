@@ -12,3 +12,47 @@ path = 'github.com/theNewDynamic/gohugo-theme-ananke/v2'
 [params]
 description = "hazeol's engineering blog"
 custom_css = ["custom.css"]
+show_reading_time = true
+sharing_links = true
+recent_posts = true
+recent_posts_number = 5
+sidebar = true
+
+[permalinks]
+posts = "/posts/:slug/"
+
+[permalinks.section]
+posts = "/posts/"
+
+[taxonomies]
+category = "categories"
+tag = "tags"
+
+[menu]
+[[menu.main]]
+name = "Categories"
+url = "/categories/"
+weight = 10
+
+[[menu.main]]
+name = "Tags"
+url = "/tags/"
+weight = 20
+
+[related]
+includeNewer = false
+threshold = 80
+toLower = false
+
+[[related.indices]]
+name = "keywords"
+weight = 100
+
+[[related.indices]]
+name = "tags"
+weight = 80
+
+[[related.indices]]
+name = "date"
+weight = 10
+

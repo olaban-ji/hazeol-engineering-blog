@@ -10,16 +10,16 @@
     <atom:link href="https://engineering.hazeol.com/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>PostgreSQL and the 63-character limit</title>
-      <link>https://engineering.hazeol.com/posts/postgresql-and-the-character-limit/</link>
+      <link>https://engineering.hazeol.com/posts/postgresql-and-the-63-character-limit/</link>
       <pubDate>Sat, 14 Sep 2024 00:00:00 +0000</pubDate>
-      <guid>https://engineering.hazeol.com/posts/postgresql-and-the-character-limit/</guid>
+      <guid>https://engineering.hazeol.com/posts/postgresql-and-the-63-character-limit/</guid>
       <description>&lt;p&gt;I recently had to set up a composite index on a model that uses Sequelize ORM to interface with PostgreSQL. Initially, the model looked like this;&lt;/p&gt;</description>
     </item>
     <item>
       <title>Automatic Generation of Swagger Specification In ExpressJS Applications</title>
-      <link>https://engineering.hazeol.com/posts/swagger-doc-generation-express/</link>
+      <link>https://engineering.hazeol.com/posts/automatic-generation-of-swagger-specification-in-expressjs-applications/</link>
       <pubDate>Sun, 11 Aug 2024 00:00:00 +0000</pubDate>
-      <guid>https://engineering.hazeol.com/posts/swagger-doc-generation-express/</guid>
+      <guid>https://engineering.hazeol.com/posts/automatic-generation-of-swagger-specification-in-expressjs-applications/</guid>
       <description>&lt;p&gt;&lt;em&gt;Update (May 13, 2025): If you’re starting a new project, I’d highly recommend using the NestJs framework, which has a dedicated module for swagger document generation that is much easier to implement and maintain.&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;As a developer, one of the tasks that ranks up there with how mundane and stressful it can be is creating or updating a Swagger spec documentation with all the necessary parameters and responses.&lt;/p&gt;</description>
     </item>
     <item>

@@ -1,0 +1,33 @@
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
+<meta property="og:title" content="{{ .Title }}" />
+<meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:site_name" content="{{ .Site.Title }}" />
+
+{{ if .Params.featured_image }}
+<meta property="og:image" content="{{ .Site.BaseURL }}{{ .Params.featured_image | relURL }}" />
+{{ else if .Site.Params.featured_image }}
+<meta property="og:image" content="{{ .Site.BaseURL }}{{ .Site.Params.featured_image | relURL }}" />
+{{ end }}
+
+{{ if .IsPage }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}" />
+<meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}" />
+{{ range .Params.tags }}
+<meta property="article:tag" content="{{ . }}" />
+{{ end }}
+{{ end }}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ .Title }}" />
+<meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
+{{ if .Params.featured_image }}
+<meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.featured_image | relURL }}" />
+{{ else if .Site.Params.featured_image }}
+<meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Site.Params.featured_image | relURL }}" />
+{{ end }}
+{{ with .Site.Params.twitter }}
+<meta name="twitter:site" content="{{ . }}" />
+{{ end }}
